@@ -1,11 +1,13 @@
 import React from 'react';
 import '@walletconnect/react-native-compat';
 import { WagmiConfig } from 'wagmi';
-import { mainnet, polygon, arbitrum } from 'viem/chains';
+import { mainnet, polygon, arbitrum, sepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import StackNavigation from './navigation/StackNavigation';
+import { PaperProvider } from 'react-native-paper';
 import 'expo-dev-client';
+import { StatusBar } from 'react-native';
 // 1. Get projectId at https://cloud.walletconnect.com
 const projectId = 'e2bb5a774ec442b502bdd2d5b0404f5f'
 
@@ -21,7 +23,7 @@ const metadata = {
   }
 }
 
-const chains = [mainnet, polygon, arbitrum]
+const chains = [mainnet, polygon, arbitrum, sepolia, zkSyncSepoliaTestnet]
 
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
 
@@ -36,12 +38,21 @@ createWeb3Modal({
 export default function App() {
   return (
     <>
-      <WagmiConfig config={wagmiConfig}>
-        <NavigationContainer>
-          <StackNavigation />
-        </NavigationContainer>
-        <Web3Modal />
-      </WagmiConfig>
+      <PaperProvider>
+        <WagmiConfig config={wagmiConfig}>
+          <StatusBar
+            animated={true}
+            backgroundColor="#171717"
+            barStyle={'default'}
+            showHideTransition={'fade'}
+            hidden={false}
+          />
+          <NavigationContainer>
+            <StackNavigation />
+          </NavigationContainer>
+          <Web3Modal />
+        </WagmiConfig>
+      </PaperProvider>
     </>
   );
 }

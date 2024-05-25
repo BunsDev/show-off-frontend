@@ -25,8 +25,8 @@ export default chains = [
         NftRef: ''
     },
     {
-        logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/moonbeam/info/logo.png',
-        chainId: '1284',
+        logo: 'https://pbs.twimg.com/profile_images/1647563917349060608/S1P_lNAN_400x400.jpg',
+        chainId: '324',
         NftRef: ''
     },
     {

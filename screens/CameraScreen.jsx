@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '@walletconnect/react-native-compat';
-import { Alert, Animated, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
+import { Alert, Animated, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Linking, TextInput } from 'react-native';
 import { View, Dimensions, Button } from 'react-native';
 import { W3mButton } from '@web3modal/wagmi-react-native'
 import '@walletconnect/react-native-compat';
 import { queryExample } from '../Lens/ExampleLenss';
-import { useAccount } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite } from 'wagmi';
 import NFTs from '../components/NFTs';
 import axios from 'axios'
 import Carousel from 'react-native-snap-carousel'
@@ -17,29 +17,27 @@ import ScreenRecorder from 'react-native-screen-mic-recorder'
 import * as MediaLibrary from 'expo-media-library'
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
+import { Dialog, Portal } from 'react-native-paper';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width + 80
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
-const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/abc/video/upload';
-const CLOUDINARY_UPLOAD_PRESET = 'fcvnveyw';
-
 import AR from '../components/AR';
-import { encode } from 'base-64';
+import DataFeed from '../components/DataFeed';
+import Web3 from 'web3';
+import { useNavigation } from '@react-navigation/native';
+import { zkSync_sepolia_contract_address } from '../constants';
+import { zkSync_Contract_ABI } from '../zkSync_Contract_ABI';
 
 
 const options = {
-  mic: false, // defaults to true
-  bitsPerSample: 60
-  // width: ? // Defaults to Dimensions.get('window').width, ignored on Android
-  // height: ? // Defaults to Dimensions.get('window').height, ignored on Android
-  // androidBannerStopRecordingHandler: fn() // Android Only: Callback function to handle stop recording from notification baner
+  mic: true, // defaults to true
+  bitsPerSample: 16
 }
 
-
 export default function CameraScreen() {
-
   const [isAREnabled, setAREnabled] = useState(true)
 
   const [display, setDisplay] = useState('block')
@@ -59,8 +57,20 @@ export default function CameraScreen() {
   const [sharableUri, setSharableUri] = useState('')
   const [modal1, setModal1] = useState(false);
   const [modal2, setModal2] = useState(false);
+  const [modal3, setModal3] = useState(false);
   const [loading, setLoading] = useState(null)
   const [isSharableLoading, setIsSharableLoading] = useState(false)
+  const [visibleDialog, setVisibleDialog] = React.useState(false);
+  const [savingToContract, setSavingToContract] = React.useState(false);
+  const navigator = useNavigation()
+  const [lensMessege, setLensMessege] = useState('')
+  
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    address: zkSync_sepolia_contract_address,
+    abi: zkSync_Contract_ABI,
+    functionName: 'addData',
+    chainId: 300
+  })
 
   const query = `query Profiles {
     profiles(
@@ -113,7 +123,6 @@ export default function CameraScreen() {
           
           // Get the asset details
           const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id);
-          console.log(assetInfo);
           const formData = new FormData();
           formData.append('file', {
             uri: assetInfo.uri,
@@ -121,7 +130,7 @@ export default function CameraScreen() {
             type: 'video/mp4',
           });
 
-          const response = await fetch('http://192.168.1.6:3000/video_upload', {
+          const response = await fetch('https://show-off-backend-bw57.onrender.com/video_upload', {
             method: 'POST',
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -131,8 +140,18 @@ export default function CameraScreen() {
           const res = await response.json();
           setSharableUri(res.result)
           setVideoUri('')
-          setIsSharableLoading(false)
-          console.log('Success:', res.result);
+          console.log(res.result);
+          setSavingToContract(true)
+          setTimeout(() => {
+            console.log('writing');
+            write({
+              args: [String(res.result)],
+              from: address
+            })
+            setSavingToContract(false)
+            setIsSharableLoading(false)
+
+          }, 2000)
       }
 
     }
@@ -148,7 +167,7 @@ export default function CameraScreen() {
 
   const fetchTokens = async () => {
     setLoading(true)
-    const data = await axios.post('http://192.168.1.6:3000/balance', {
+    const data = await axios.post('https://show-off-backend-bw57.onrender.com/balance', {
       address,
       chain: chains[page].chainId
     },
@@ -157,14 +176,8 @@ export default function CameraScreen() {
           "Content-Type": "application/json"
         },
       })
-    console.log(data.data);
     setTokens((data.data.result).filter(item => item.logo != null))
     setLoading(false)
-  }
-
-  async function onSignIn(tokens, profile) {
-    console.log('tokens: ', tokens)
-    console.log('profile: ', profile)
   }
 
   const loadAR = () => {
@@ -179,19 +192,23 @@ export default function CameraScreen() {
   useEffect(() => {
     if (modal1 && page != prevPage) {
       setPrevPage(page)
-      // fetchTokens()
+      fetchTokens()
     }
   }, [page, modal1])
 
+
   return (
+
     <>
-      <View style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: 40 }}>
+      <View style={{ flex: 1, display: 'flex', flexDirection: 'column', marginTop: 0 }}>
 
         {
           isAREnabled
           ? <AR main={main} />
-          : <View className='flex-1 bg-black flex justify-start items-center'>
-            <Image source={require('../assets/download.gif')} className='w-screen h-32 mt-24' />
+          : <View className='flex-1 bg-[black] flex justify-start items-center'>
+            <View className='w-screen h-screen bg-black'>
+            <ActivityIndicator animating={true} color={'#000'} size={'large'} className='mt-20' />
+            </View>
           </View>           
         }
 
@@ -230,7 +247,7 @@ export default function CameraScreen() {
                 </Pressable>
             )}
             hasParallaxImages={true}
-            sliderWidth={SLIDER_WIDTH}
+            sliderWidth={SLIDER_WIDTH} 
             itemWidth={100}
             inactiveSlideShift={0}
             useScrollView={true}
@@ -261,8 +278,33 @@ export default function CameraScreen() {
             </View>
           </View>
         </Modal>
-        <TouchableOpacity className='absolute top-2 left-2 bg-white p-2 rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal2(true)}>
-          <AntDesign name="CodeSandbox" size={24} color="black" style={{ margin: 4 }} />
+        <TouchableOpacity className='absolute top-[116px] left-2 bg-white rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal2(true)}>
+          <Image source={{uri: 'https://as2.ftcdn.net/v2/jpg/04/36/71/89/1000_F_436718960_NVJ7n914NCszZdCR2w50WAgwCx5WcNOp.jpg'}} className='w-12 h-12 rounded-full' />
+        </TouchableOpacity>
+
+        {/* data feed */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modal3}
+          onRequestClose={() => setModal3(false)}
+        >
+          <View style={styles.modalContainer}>
+            <TouchableOpacity
+              onPress={() => setModal3(false)}
+              style={styles.closeModalButton}
+            >
+              <Text style={styles.closeModalText}>
+                <Entypo name="cross" size={24} color="white" />
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.modalContent}>
+              <DataFeed setMain={setMain} loadAR={loadAR} />
+            </View>
+          </View>
+        </Modal>
+        <TouchableOpacity className='absolute top-[170px] left-2 bg-white p-1 rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal3(true)}>
+          <Image source={require('../assets/chainlink_datafedd.png')} className='w-10 h-10 rounded-full' />
         </TouchableOpacity>
 
         {/* tokens */}
@@ -296,30 +338,39 @@ export default function CameraScreen() {
                                 }}
                               >
                                 <Image source={{ uri: item.logo }} width={50} height={50} />
-                                <Text className='text-slate-300 text-sm mt-2'>{(item.balance / 1E6).toFixed(4)} {item.name}</Text>
+                                <Text className='text-slate-700 text-sm mt-2'>{(item.balance / 1E6).toFixed(2)} {item.name}</Text>
                               </TouchableOpacity>
                             : <TouchableOpacity className='p-1 flex justify-center items-center rounded-md w-36 h-36 m-4' key={index}
                                 onPress={() => {
                                   loadAR()
-                                  setMain({type:'token', image:item.logo, totalTokens:`${(item.balance / 1E18).toFixed(4)} ${item.name}`})
+                                  setMain({type:'token', image:item.logo, totalTokens:`${(item.balance / 1E18).toFixed(2)} ${item.name}`})
                                 }}
                               >
                                 <Image source={{ uri: item.logo }} width={50} height={50} />
-                                <Text className='text-slate-300 text-sm mt-2'>{(item.balance / 1E18).toFixed(4)} {item.name}</Text>
+                                <Text className='text-slate-700 text-sm mt-2'>{(item.balance / 1E18).toFixed(4)} {item.name}</Text>
                               </TouchableOpacity>
                           ))
                         : <View className='flex-1 w-full mt-24 flex justify-center items-center'><Text className='text-slate-300'>No Tokens Found! </Text></View>
                       }
                     </View>
-                  : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#fff'} size={'large'} /></View>
+                  : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
               }
             </View>
           </View>
         </Modal>
 
         {/* token button */}
-        <TouchableOpacity className='absolute top-16 px-4 left-2 bg-white p-2 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => setModal1(true)}>
-          <FontAwesome6 name="ethereum" size={28} color="black" style={{marginLeft: 6, marginRight: 6}} />
+        <TouchableOpacity className='absolute top-16 px-4 left-2 bg-white p-0 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => setModal1(true)}>
+          <Image source={{uri: 'https://banner2.cleanpng.com/20180204/dve/kisspng-token-coin-initial-coin-offering-r-l-stevens-plasc-token-cliparts-5a76aca3596111.0557334415177268833661.jpg'}} className='w-12 h-12 rounded-full' />
+        </TouchableOpacity>
+
+      {/* lens button */}
+        <TouchableOpacity className='absolute top-2 px-4 left-2 bg-white p-1 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
+          onPress={() => {
+            loadAR()
+            setMain({type: 'lens', lensHandle})
+          }}>
+          <Image source={require('../assets/lens.jpeg')} className='w-10 h-10 rounded-full' />
         </TouchableOpacity>
 
         {/* download button */}
@@ -329,26 +380,47 @@ export default function CameraScreen() {
 
         {/* share button */}
         {sharableUri != '' && <TouchableOpacity className='absolute bottom-48 right-0 bg-white p-2 rounded-tl-full rounded-bl-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
-          onPress={() => Linking.openURL(`https://lenster.xyz/?text=Hello%20World!&url=${sharableUri}&via=showoff&hashtags=lens,web3,showoff`)}>
+          onPress={() => setVisibleDialog(!visibleDialog)}>
           <MaterialCommunityIcons name="share" size={24} color="black" style={{marginLeft: 2, marginRight: 2}} />
-        </TouchableOpacity>}
+        </TouchableOpacity>} 
 
         {/* rotate logo */}
         <TouchableOpacity className='absolute top-2 right-[43.5%] bg-black rounded-full flex justify-start items-center flex-row z-20' onPress={loadAR}>
           <Image source={require('../assets/logo2.png')} className='w-12 h-12' />
         </TouchableOpacity>
 
+        {/* album */}
+        <TouchableOpacity className='absolute top-14 right-2 bg-white rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => navigator.navigate('videolist')}>
+          <Image source={{uri: 'https://static.vecteezy.com/system/resources/previews/005/919/290/original/video-play-film-player-movie-solid-icon-illustration-logo-template-suitable-for-many-purposes-free-vector.jpg'}} className='w-12 h-12 rounded-full' />
+        </TouchableOpacity>
+
         <View className='absolute top-2 right-2'>
           <W3mButton />
         </View>
 
-{/* load sharable link button */}
+        {/* load sharable link button */}
         {
           isSharableLoading
           &&  <View className='flex-1 absolute flex justify-center items-center w-screen h-screen bg-[#00000090] z-40'>
-            <Image source={require('../assets/loading 2.gif')} className='w-24 h-24' />
+            <ActivityIndicator animating={true} color={'#fff'} size={'large'} />
+            {savingToContract ? <Text className='text-slate-300 mt-2'>Saving link to smart contract...</Text> : <Text className='text-slate-300 mt-2'>Saving to Media & Creating Sharable Link...</Text>}
           </View>
         }
+
+        
+        <Portal>
+          <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(!visibleDialog)} className='bg-slate-200'>
+            <Dialog.Content>
+            <TextInput
+              placeholder="Message on lens"
+              value={lensMessege}
+              onChangeText={text => setLensMessege(text)}
+              className='border border-black rounded-lg p-2'
+            />
+              <TouchableOpacity className='mt-4 rounded-lg bg-black text-center p-2' onPress={() => Linking.openURL(`https://lenster.xyz/?text=${lensMessege}&url=${sharableUri}&via=showoff&hashtags=lens,web3,showoff`)}><Text className='text-white text-center'>Share with captured video 🔗 on lenster</Text></TouchableOpacity>
+            </Dialog.Content>
+          </Dialog>
+        </Portal>
 
       </View>
     </>
@@ -405,7 +477,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "70%",
     justifyContent: "flex-start",
-    backgroundColor: "#000",
+    backgroundColor: "rgb(226 232 240)",
     display:"flex",
     alignItems:'center',
     flexDirection:'row',

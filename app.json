@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "expo-starter-kit",
+    "name": "Show off",
     "slug": "expo-starter-kit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo2.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo3.png",
+      "image": "./assets/logo2.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
@@ -25,7 +25,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo2.png",
         "backgroundColor": "#000"
       },
       "permissions": [
@@ -46,7 +46,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "8b5e86e5-b798-4845-9266-38ccb9668196"
+        "projectId": "d9ebaf19-0be9-486a-8aa4-60496a76ac2b"
       }
     }
   }

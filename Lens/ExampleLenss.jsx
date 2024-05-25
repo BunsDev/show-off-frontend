@@ -2,7 +2,6 @@ import { apolloClient } from './ApolloClient';
 import { gql } from '@apollo/client'
 
 export async function queryExample (q) {
-  console.log(q);
   const response = await apolloClient.query({
    query: gql(q),
  })

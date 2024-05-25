@@ -2,8 +2,8 @@ import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } fr
 import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi';
 import axios from 'axios';
-// import Video from 'react-native-video';
 import chains from '../chains'
+import { API_KEY } from '../alchemyApi';
 
 export default function NFTs({ setMain, index, modal2, loadAR }) {
 
@@ -20,8 +20,7 @@ export default function NFTs({ setMain, index, modal2, loadAR }) {
       return
     }
     if (nftList) {
-      const APIKEY = 's6T5WvjW2sQjP84rpioxQWE-Z7w9klYM';
-      const baseURL = `https://${chains[index].NftRef}.g.alchemy.com/v2/${APIKEY}/getNFTs/?owner=${address}`;
+      const baseURL = `https://${chains[index].NftRef}.g.alchemy.com/v2/${API_KEY}/getNFTs/?owner=${address}`;
 
       const response = await axios.get(baseURL);
       const res_data = response.data.ownedNfts;
@@ -53,6 +52,7 @@ export default function NFTs({ setMain, index, modal2, loadAR }) {
       fetchNft()
     }
   }, [index, modal2])
+
   return (
     <>
       {
@@ -75,7 +75,7 @@ export default function NFTs({ setMain, index, modal2, loadAR }) {
               }
             </View>
           </ScrollView>
-          : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#fff'} size={'large'} /></View>
+          : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
       }
     </>
   )

@@ -8,7 +8,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 export const SLIDER_WIDTH = Dimensions.get('window').width + 80
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
-export default function CameraComponent({display, main}) {
+export default function CameraComponent({ display, main }) {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [faces, setFaces] = useState([]);
@@ -62,15 +62,11 @@ export default function CameraComponent({display, main}) {
               key={index}
               style={{
                 color: 'white',
-                // backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 padding: 5,
                 marginLeft: face.bounds.origin.x - 130,
                 marginTop: face.bounds.origin.y - 200,
               }}
             >
-              {/* {console.log(face)} */}
-              {/* Replace with your desired name */}
-              {/* {lensHandle}.lens */}
               <Image style={{ width: 100, height: 100 }} className='rounded-md' source={{ uri: main }} />
             </View>
           ))}
@@ -83,7 +79,7 @@ export default function CameraComponent({display, main}) {
         <FontAwesome6 name="rotate" size={20} color="black" />
       </TouchableOpacity>
 
-      </>
+    </>
   );
 }
 
