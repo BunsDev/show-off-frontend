@@ -47,11 +47,11 @@ export default function VideoList() {
                       </TouchableOpacity>
                   </TouchableOpacity>
                 ))
-                : <View className='flex-1 flex justify-center items-center h-full w-screen mt-[200px]'><ActivityIndicator animating={true} color={'#fff'} size={'large'} /></View>
+                : <View className='flex-1 flex justify-center items-center h-full w-screen mt-[200px]'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
               }
             </View>
           </ScrollView>
-            : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#fff'} size={'large'} /></View>
+            : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
 
         }
       

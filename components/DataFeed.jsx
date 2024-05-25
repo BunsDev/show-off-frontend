@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { zkSync_datafeed_abi } from '../zkSync_DataFeed_ABI';
-import { zkSync_sepolia_datafeed_address } from '../constants';
+import { zkSync_era_mainnet_datafeed_address, zkSync_sepolia_datafeed_address } from '../constants';
+import { zkSync_mainnet_datafeed_abi } from '../zkSync_mainnet_DataFeed_ABI';
 
 export default function DataFeed({ setMain, loadAR }) {
 
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const web3 = new Web3("https://rpc.ankr.com/zksync_era_sepolia")
-    const priceFeed = new web3.eth.Contract(zkSync_datafeed_abi, zkSync_sepolia_datafeed_address)
+    const web3 = new Web3("https://rpc.ankr.com/zksync_era")
+    const priceFeed = new web3.eth.Contract(zkSync_mainnet_datafeed_abi, zkSync_era_mainnet_datafeed_address)
 
     const convertNumber = (num) => {
         // Convert the number to a string
@@ -64,7 +65,32 @@ export default function DataFeed({ setMain, loadAR }) {
             logo2: "https://seeklogo.com/images/U/usd-coin-usdc-logo-CB4C5B1C51-seeklogo.com.png",
             pair: "LINK / USD",
             price: convertNumber(d3)
+        })        
+
+        const d4 = await priceFeed.methods.getAAVE_USD().call()
+        arr.push({
+            logo1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3ljWL3z1-Cmy4taC_fpkGizecvfZP2d7cUzWseUn4hw&s",
+            logo2: "https://seeklogo.com/images/U/usd-coin-usdc-logo-CB4C5B1C51-seeklogo.com.png",
+            pair: "AAVE / USD",
+            price: convertNumber(d4)
+        })  
+
+        const d5 = await priceFeed.methods.getSOL_USD().call()
+        arr.push({
+            logo1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiqYrYiUPB0Y7rnsUEoSLAWxmslfc9B22S3VfuvSmx-Q&s",
+            logo2: "https://seeklogo.com/images/U/usd-coin-usdc-logo-CB4C5B1C51-seeklogo.com.png",
+            pair: "SOL / USD",
+            price: convertNumber(d5)
         })
+
+        const d6 = await priceFeed.methods.getDOGE_USD().call()
+        arr.push({
+            logo1: "https://seeklogo.com/images/D/dogecoin-doge-logo-625F9D262A-seeklogo.com.png",
+            logo2: "https://seeklogo.com/images/U/usd-coin-usdc-logo-CB4C5B1C51-seeklogo.com.png",
+            pair: "DOGE / USD",
+            price: convertNumber(d6)
+        })
+
         setData(arr)
         setLoading(false)
     }
@@ -96,7 +122,7 @@ export default function DataFeed({ setMain, loadAR }) {
                                         </View>
                                         <Text className='text-slate-500 ml-2'>{item.pair}</Text>
                                     </View>
-                                    <Text className='text-slate-700'>$ {(Number(item.price)).toFixed(2)}</Text>
+                                    <Text className='text-slate-700'>$ {(Number(item.price)).toFixed(4)}</Text>
                                 </TouchableOpacity>
                             ))
                             : <View className='flex-1 flex justify-center items-center h-full w-screen mt-[200px]'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>

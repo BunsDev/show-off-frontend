@@ -25,7 +25,7 @@ export default chains = [
         NftRef: ''
     },
     {
-        logo: 'https://pbs.twimg.com/profile_images/1647563917349060608/S1P_lNAN_400x400.jpg',
+        logo: 'https://pbs.twimg.com/profile_images/1647563917349060608/S1P_lNAN_400x400.jpg', //zkSync
         chainId: '324',
         NftRef: ''
     },

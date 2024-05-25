@@ -11,7 +11,7 @@ import {
 const AR = ({ main }) => {
 
   const sceneNavigatorRef = useRef(null);
-  const [text, setText] = useState('Initializing AR...');
+  const [text, setText] = useState('Hello World!');
   const [xyz, setXyz] = useState({ x: 0, y: 0, z: -5 })
   const [xyz2, setXyz2] = useState({ x: 0, y: -1, z: -6 })
   const [xyz3, setXyz3] = useState({ x: 0, y: -1, z: -6 })
@@ -68,13 +68,14 @@ const AR = ({ main }) => {
               main.type == 'nft'
               && <ViroImage
                 source={{ uri: main.image }}
-                position={[xyz.x, xyz.y, xyz.z]}
+                position={[xyz.x, xyz.y, xyz.z-3]}
                 onDrag={_onDrag}
               />
             }
             {
               main.type == 'token'
               && <ViroNode
+              scale={[0, -1, -1]}
                 position={[xyz2.x, xyz2.y, xyz2.z]}
                 onDrag={_onDrag2}>
                 <ViroImage
@@ -103,14 +104,14 @@ const AR = ({ main }) => {
                   }}
                 />
                 <ViroText text={main.pair}
-                  width={2}
+                  width={3}
                   style={{
                     fontFamily: "Arial",
                     fontSize: 40,
                     fontStyle: "italic",
                     color: "#fff"
                   }}
-                  position={[xyz3.x + 0.5, xyz3.y - 1.5, xyz3.z]}
+                  position={[xyz3.x + 1, xyz3.y - 1.5, xyz3.z]}
                 />
                 <ViroText text={`$ ${Number(main.price).toFixed(2)}`}
                   width={3}
@@ -145,6 +146,10 @@ const AR = ({ main }) => {
                   position={[xyz3.x + 0.5, xyz3.y - 1.5, xyz3.z]}
                 />
               </ViroNode>
+            }
+            {
+              (main.type != 'lens' && main.type != 'data_feed' && main.type != 'nft') &&
+              <ViroText text={text} position={[0, 0, -4]} />
             }
           </ViroARScene>
         ),

@@ -1,3 +1,5 @@
 export const zkSync_sepolia_contract_address = '0x5FC9b846a037b4A6DF8fBEFFc03A1Cc4bec57163'
 
 export const zkSync_sepolia_datafeed_address = '0x1e0882F337FAeB38A7B86E6c1b9C416D5f8Af2b7'
+
+export const zkSync_era_mainnet_datafeed_address = '0x084934226D40f23f3eD361c6586C4507c9eC9349'
