@@ -6,10 +6,11 @@ import {
   ViroImage,
   ViroNode,
   ViroText,
-  Viro3DObject
+  Viro3DObject,
+  ViroAmbientLight
 } from '@viro-community/react-viro';
 
-const AR = ({ main }) => {
+const AR = ({ main, setDisplayObject }) => {
 
   const sceneNavigatorRef = useRef(null);
   const [text, setText] = useState('Hello World!');
@@ -69,15 +70,16 @@ const AR = ({ main }) => {
             {
               main.type == 'nft'
               && <ViroImage
+                  scale={[1, 1, 1]}
                 source={{ uri: main.image }}
-                position={[xyz.x, xyz.y, xyz.z-3]}
+                position={[xyz.x, xyz.y, xyz.z - 3]}
                 onDrag={_onDrag}
               />
             }
             {
               main.type == 'token'
               && <ViroNode
-              scale={[0, -1, -1]}
+                  scale={[1, 1, 1]}
                 position={[xyz2.x, xyz2.y, xyz2.z]}
                 onDrag={_onDrag2}>
                 <ViroImage
@@ -91,6 +93,7 @@ const AR = ({ main }) => {
               main.type == 'data_feed'
               && <ViroNode
                 position={[xyz3.x, xyz3.y, xyz3.z]}
+                  scale={[1, 1, 1]}
                 onDrag={_onDrag3}>
                 <ViroImage
                   source={{ uri: main.image1 }}
@@ -130,6 +133,7 @@ const AR = ({ main }) => {
             {main.type == 'lens' &&
               <ViroNode
                 position={[xyz3.x, xyz3.y, xyz3.z]}
+                  scale={[1, 1, 1]}
                 onDrag={_onDrag3}>
                 <ViroImage
                   source={require('../assets/lens.jpeg')}
@@ -151,18 +155,32 @@ const AR = ({ main }) => {
             }
             {
               (main.type != 'lens' && main.type != 'data_feed' && main.type != 'nft' && main.type != '3DNft') &&
-              <ViroText text={text} position={[0, 0, -4]} />
+              <ViroText text={text} position={[0, 0, -4]} 
+                  scale={[1, 1, 1]}/>
             }
             {
               main.type == '3DNft' &&
-              <Viro3DObject
-                source={{uri:main.obj}}
-                position={[-0.0, -5.5, -1.15]}
-                // materials={["heart"]}
-                type="GLB" />
+              <>
+                <ViroAmbientLight
+                  color="#FFFFFF"
+                />
+                <Viro3DObject
+                  source={{uri : main.obj}}
+                  // materials={["heart"]}
+                  onLoadStart={() => setDisplayObject(true)}
+                  onLoadEnd={() => setDisplayObject(false)}
+                  resources={[]}
+                  highAccuracyEvents={true}
+                  position={[0, -0.3, -1.5]}
+                  scale={[1, 1, 1]}
+                  type="GLB" />
+              </>
             }
+
+            {/* main.type == 'videoNft' it is remaining, add ViroVideo */}
+            
           </ViroARScene>
-        ), 
+        ),
       }}
       style={styles.f1}
     />

@@ -64,6 +64,7 @@ export default function CameraScreen() {
   const [savingToContract, setSavingToContract] = React.useState(false);
   const navigator = useNavigation()
   const [lensMessege, setLensMessege] = useState('')
+  const [displayObject, setDisplayObject] = useState(false)
   
   const { data, isLoading, isSuccess, write } = useContractWrite({
     address: zkSync_sepolia_contract_address,
@@ -204,10 +205,10 @@ export default function CameraScreen() {
 
         {
           isAREnabled
-          ? <AR main={main} />
+          ? <AR main={main} setDisplayObject={setDisplayObject} />
           : <View className='flex-1 bg-[black] flex justify-start items-center'>
             <View className='w-screen h-screen bg-black'>
-            <ActivityIndicator animating={true} color={'#000'} size={'large'} className='mt-20' />
+            <ActivityIndicator animating={true} color={'#fff'} size={'large'} className='mt-20' />
             </View>
           </View>           
         }
@@ -350,7 +351,7 @@ export default function CameraScreen() {
                                 <Text className='text-slate-700 text-sm mt-2'>{(item.balance / 1E18).toFixed(4)} {item.name}</Text>
                               </TouchableOpacity>
                           ))
-                        : <View className='flex-1 w-full mt-24 flex justify-center items-center'><Text className='text-slate-300'>No Tokens Found! </Text></View>
+                        : <View className='flex-1 w-full mt-24 flex justify-center items-center'><Text className='text-slate-700'>No Tokens Found! </Text></View>
                       }
                     </View>
                   : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
@@ -407,6 +408,14 @@ export default function CameraScreen() {
           </View>
         }
 
+        {/* loading object */}
+        
+        {
+          displayObject && <View className='flex-1 absolute flex justify-center items-center w-screen h-screen bg-[#00000090] z-40'>
+            <ActivityIndicator animating={true} color={'#fff'} size={'large'} />
+            <Text className='text-slate-300 mt-2'>Loading 3D Model...</Text>
+          </View>
+        }
         
         <Portal>
           <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(!visibleDialog)} className='bg-slate-200'>

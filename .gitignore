@@ -2,8 +2,9 @@
 
 # dependencies
 node_modules/
-alchemyApi.js
-android
+/alchemyApi.js
+/android
+/metro.config.js
 
 # Expo
 .expo/
