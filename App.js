@@ -8,6 +8,7 @@ import StackNavigation from './navigation/StackNavigation';
 import { PaperProvider } from 'react-native-paper';
 import 'expo-dev-client';
 import { StatusBar } from 'react-native';
+
 // 1. Get projectId at https://cloud.walletconnect.com
 const projectId = 'e2bb5a774ec442b502bdd2d5b0404f5f'
 
@@ -38,21 +39,21 @@ createWeb3Modal({
 export default function App() {
   return (
     <>
-      <PaperProvider>
-        <WagmiConfig config={wagmiConfig}>
-          <StatusBar
-            animated={true}
-            backgroundColor="#171717"
-            barStyle={'default'}
-            showHideTransition={'fade'}
-            hidden={false}
-          />
-          <NavigationContainer>
-            <StackNavigation />
-          </NavigationContainer>
-          <Web3Modal />
-        </WagmiConfig>
-      </PaperProvider>
+        <PaperProvider>
+          <WagmiConfig config={wagmiConfig}>
+            <StatusBar
+              animated={true}
+              backgroundColor="#171717"
+              barStyle={'default'}
+              showHideTransition={'fade'}
+              hidden={false}
+            />
+            <NavigationContainer>
+              <StackNavigation />
+            </NavigationContainer>
+            <Web3Modal />
+          </WagmiConfig>
+        </PaperProvider>
     </>
   );
 }

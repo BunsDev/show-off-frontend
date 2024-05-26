@@ -5,7 +5,8 @@ import {
   ViroARSceneNavigator, ViroTrackingStateConstants,
   ViroImage,
   ViroNode,
-  ViroText
+  ViroText,
+  Viro3DObject
 } from '@viro-community/react-viro';
 
 const AR = ({ main }) => {
@@ -21,6 +22,7 @@ const AR = ({ main }) => {
       setText('Hello World!');
     }
   };
+  console.log(main);
 
   function _onDrag(draggedToPosition, source) {
     setXyz({ x: draggedToPosition[0], y: draggedToPosition[1], z: draggedToPosition[2] })
@@ -148,11 +150,19 @@ const AR = ({ main }) => {
               </ViroNode>
             }
             {
-              (main.type != 'lens' && main.type != 'data_feed' && main.type != 'nft') &&
+              (main.type != 'lens' && main.type != 'data_feed' && main.type != 'nft' && main.type != '3DNft') &&
               <ViroText text={text} position={[0, 0, -4]} />
             }
+            {
+              main.type == '3DNft' &&
+              <Viro3DObject
+                source={{uri:main.obj}}
+                position={[-0.0, -5.5, -1.15]}
+                // materials={["heart"]}
+                type="GLB" />
+            }
           </ViroARScene>
-        ),
+        ), 
       }}
       style={styles.f1}
     />

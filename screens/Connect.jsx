@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import React, { useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { useNavigation } from '@react-navigation/native'
 import { W3mButton } from '@web3modal/wagmi-react-native'
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 export default function Connect() {
     const {address} = useAccount()
     const navigator = useNavigation()
+
   return (
     <>
       <View style={{flex:1, display: "flex", justifyContent: "space-around", alignItems:"center", flexDirection:"column"}} className='bg-black'>
