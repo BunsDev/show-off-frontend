@@ -7,7 +7,7 @@
 
 
 ## Description
-- "Show Off" is a cutting-edge AR mobile app that brings crypto assets to life in the real world. Users can visualize and interact with their crypto tokens and NFTs in an immersive AR experience. The app supports multiple blockchain networks and integrated with protocols like Chainlink and Lens. Users can record videos of their AR interactions and share that on hey (Lenster).
+- "Show Off" is a cutting-edge Social-AR mobile app that brings crypto assets to life in the real world. Users can visualize and interact with their crypto tokens and NFTs in an immersive AR experience. The app supports multiple blockchain networks and integrated with protocols like Chainlink and Lens. Users can record videos of their AR interactions and share that on hey (Lenster).
 
 
 
