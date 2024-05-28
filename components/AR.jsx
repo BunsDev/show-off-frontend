@@ -1,5 +1,5 @@
 import React, { useRef, useState, memo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import {
   ViroARScene,
   ViroARSceneNavigator, ViroTrackingStateConstants,
@@ -12,7 +12,6 @@ import {
 
 const AR = ({ main, setDisplayObject }) => {
 
-  const sceneNavigatorRef = useRef(null);
   const [text, setText] = useState('Hello World!');
   const [xyz, setXyz] = useState({ x: 0, y: 0, z: -5 })
   const [xyz2, setXyz2] = useState({ x: 0, y: -1, z: -6 })
@@ -37,32 +36,9 @@ const AR = ({ main, setDisplayObject }) => {
     setXyz3({ x: draggedToPosition[0], y: draggedToPosition[1], z: draggedToPosition[2] })
   }
 
-  // const recording = () => {
-  //   console.log(this); 
-  // }
-
-  // const start = async () => {
-  //   this.props.sceneNavigator.startVideoRecording('video',true, (err) => {
-  //     console.log(err);
-  //   })
-  // }
-
-  // const stop = async () => {
-  //   let data = await ref.stopVideoRecording()
-  //   console.log(data);
-  // }
-
-  // useEffect(() => {
-  //   start()
-  //   const time = setTimeout(() => {
-  //     stop()
-  //   }, 2000)
-  //   return clearTimeout(time)
-  // }, [])
-
   return (
+    <>
     <ViroARSceneNavigator
-      // ref={recording}
       autofocus={true}
       initialScene={{
         scene: () => (
@@ -73,7 +49,7 @@ const AR = ({ main, setDisplayObject }) => {
                   scale={[1, 1, 1]}
                 source={{ uri: main.image }}
                 position={[xyz.x, xyz.y, xyz.z - 3]}
-                onDrag={_onDrag}
+                onDrag={_onDrag} dragType="FixedToWorld"
               />
             }
             {
@@ -155,7 +131,7 @@ const AR = ({ main, setDisplayObject }) => {
             }
             {
               (main.type != 'lens' && main.type != 'data_feed' && main.type != 'nft' && main.type != '3DNft') &&
-              <ViroText text={text} position={[0, 0, -4]} 
+              <ViroText text={text} position={[0, 0, -4]} dragType="FixedToWorld"
                   scale={[1, 1, 1]}/>
             }
             {
@@ -175,6 +151,7 @@ const AR = ({ main, setDisplayObject }) => {
                   scale={[1, 1, 1]}
                   type="GLB" />
               </>
+              
             }
 
             {/* main.type == 'videoNft' it is remaining, add ViroVideo */}
@@ -184,6 +161,7 @@ const AR = ({ main, setDisplayObject }) => {
       }}
       style={styles.f1}
     />
+  </>
   );
 };
 

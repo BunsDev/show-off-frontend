@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Dialog, Portal } from 'react-native-paper';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width + 80
+export const SLIDER_HEIGHT = Dimensions.get('window').height
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 import AR from '../components/AR';
@@ -211,7 +212,7 @@ export default function CameraScreen() {
             <ActivityIndicator animating={true} color={'#fff'} size={'large'} className='mt-20' />
             </View>
           </View>           
-        }
+        }   
 
         <View style={{ position: 'absolute', zIndex: 20, bottom: 10, marginLeft: -40, display: display }}>
           <Carousel
@@ -279,7 +280,7 @@ export default function CameraScreen() {
             </View>
           </View>
         </Modal>
-        <TouchableOpacity className='absolute top-[116px] left-2 bg-white rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal2(true)}>
+        <TouchableOpacity className='absolute top-[116px] opacity-60 left-2 bg-white rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal2(true)}>
           <Image source={{uri: 'https://as2.ftcdn.net/v2/jpg/04/36/71/89/1000_F_436718960_NVJ7n914NCszZdCR2w50WAgwCx5WcNOp.jpg'}} className='w-12 h-12 rounded-full' />
         </TouchableOpacity>
 
@@ -304,7 +305,7 @@ export default function CameraScreen() {
             </View>
           </View>
         </Modal>
-        <TouchableOpacity className='absolute top-[170px] left-2 bg-white p-1 rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal3(true)}>
+        <TouchableOpacity className='absolute top-[170px] opacity-80 left-2 bg-white p-1 rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal3(true)}>
           <Image source={require('../assets/chainlink_datafedd.png')} className='w-10 h-10 rounded-full' />
         </TouchableOpacity>
 
@@ -361,12 +362,12 @@ export default function CameraScreen() {
         </Modal>
 
         {/* token button */}
-        <TouchableOpacity className='absolute top-16 px-4 left-2 bg-white p-0 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => setModal1(true)}>
+        <TouchableOpacity className='absolute top-16 px-4 opacity-60 left-2 bg-white p-0 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => setModal1(true)}>
           <Image source={{uri: 'https://banner2.cleanpng.com/20180204/dve/kisspng-token-coin-initial-coin-offering-r-l-stevens-plasc-token-cliparts-5a76aca3596111.0557334415177268833661.jpg'}} className='w-12 h-12 rounded-full' />
         </TouchableOpacity>
 
       {/* lens button */}
-        <TouchableOpacity className='absolute top-2 px-4 left-2 bg-white p-1 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
+        <TouchableOpacity className='absolute top-2 px-4 left-2 opacity-80 bg-white p-1 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
           onPress={() => {
             loadAR()
             setMain({type: 'lens', lensHandle})
@@ -384,25 +385,25 @@ export default function CameraScreen() {
           onPress={() => setVisibleDialog(!visibleDialog)}>
           <MaterialCommunityIcons name="share" size={24} color="black" style={{marginLeft: 2, marginRight: 2}} />
         </TouchableOpacity>} 
-
+     
         {/* rotate logo */}
-        <TouchableOpacity className='absolute top-2 right-[43.5%] bg-black rounded-full flex justify-start items-center flex-row z-20' onPress={loadAR}>
-          <Image source={require('../assets/logo2.png')} className='w-12 h-12' />
+        <TouchableOpacity className='absolute top-14 right-2 bg-[#00000080] p-2 rounded-full flex justify-start items-center flex-row z-20' onPress={loadAR} style={{ display: display }}>
+          <Ionicons name="reload" size={24} color="white" style={{marginLeft: 2, marginRight: 2}} />
         </TouchableOpacity>
 
         {/* album */}
-        <TouchableOpacity className='absolute top-14 right-2 bg-white rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => navigator.navigate('videolist')}>
-          <Image source={{uri: 'https://static.vecteezy.com/system/resources/previews/005/919/290/original/video-play-film-player-movie-solid-icon-illustration-logo-template-suitable-for-many-purposes-free-vector.jpg'}} className='w-12 h-12 rounded-full' />
+        <TouchableOpacity className='absolute top-28 right-2 opacity-80 bg-[#00000080] p-2 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => navigator.navigate('videolist')}>
+          <Ionicons name="albums-outline" size={24} color="white" style={{marginLeft: 2, marginRight: 2}} />
         </TouchableOpacity>
 
         <View className='absolute top-2 right-2'>
           <W3mButton />
-        </View>
+        </View> 
 
         {/* load sharable link button */}
         {
           isSharableLoading
-          &&  <View className='flex-1 absolute flex justify-center items-center w-screen h-screen bg-[#00000090] z-40'>
+          &&  <View className='flex-1 absolute flex justify-center items-center w-screen bg-[#00000090] z-40' style={{height: SLIDER_HEIGHT + 100}}>
             <ActivityIndicator animating={true} color={'#fff'} size={'large'} />
             {savingToContract ? <Text className='text-slate-300 mt-2'>Saving link to smart contract...</Text> : <Text className='text-slate-300 mt-2'>Saving to Media & Creating Sharable Link...</Text>}
           </View>
@@ -411,7 +412,7 @@ export default function CameraScreen() {
         {/* loading object */}
         
         {
-          displayObject && <View className='flex-1 absolute flex justify-center items-center w-screen h-screen bg-[#00000090] z-40'>
+          displayObject && <View className='flex-1 absolute flex justify-center items-center w-screen bg-[#00000090] z-40' style={{height: SLIDER_HEIGHT + 100}}>
             <ActivityIndicator animating={true} color={'#fff'} size={'large'} />
             <Text className='text-slate-300 mt-2'>Loading 3D Model...</Text>
           </View>
@@ -426,7 +427,7 @@ export default function CameraScreen() {
               onChangeText={text => setLensMessege(text)}
               className='border border-black rounded-lg p-2'
             />
-              <TouchableOpacity className='mt-4 rounded-lg bg-black text-center p-2' onPress={() => Linking.openURL(`https://lenster.xyz/?text=${lensMessege}&url=${sharableUri}&via=showoff&hashtags=lens,web3,showoff`)}><Text className='text-white text-center'>Share with captured video 🔗 on lenster</Text></TouchableOpacity>
+              <TouchableOpacity className='mt-4 rounded-lg bg-black text-center p-2' onPress={() => Linking.openURL(`https://lenster.xyz/?text=${lensMessege}&url=${sharableUri}&via=showoff&hashtags=lens,web3,showoff`)}><Text className='text-white text-center'>Share with captured video 🔗 on hey(lenster)</Text></TouchableOpacity>
             </Dialog.Content>
           </Dialog>
         </Portal>

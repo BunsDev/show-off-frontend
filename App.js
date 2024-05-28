@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '@walletconnect/react-native-compat';
 import { WagmiConfig } from 'wagmi';
 import { mainnet, polygon, arbitrum, sepolia, zkSyncSepoliaTestnet } from 'viem/chains';
@@ -7,7 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import StackNavigation from './navigation/StackNavigation';
 import { PaperProvider } from 'react-native-paper';
 import 'expo-dev-client';
-import { StatusBar } from 'react-native';
+import { StatusBar, Text, View } from 'react-native';
+import { ViroUtils, isARSupportedOnDevice } from '@viro-community/react-viro';
 
 // 1. Get projectId at https://cloud.walletconnect.com
 const projectId = 'e2bb5a774ec442b502bdd2d5b0404f5f'
@@ -37,13 +38,14 @@ createWeb3Modal({
 })
 
 export default function App() {
+
   return (
     <>
         <PaperProvider>
           <WagmiConfig config={wagmiConfig}>
             <StatusBar
               animated={true}
-              backgroundColor="#171717"
+              backgroundColor="#000"
               barStyle={'default'}
               showHideTransition={'fade'}
               hidden={false}
