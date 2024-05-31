@@ -5,7 +5,7 @@ import { View, Dimensions, Button } from 'react-native';
 import { W3mButton } from '@web3modal/wagmi-react-native'
 import '@walletconnect/react-native-compat';
 import { queryExample } from '../Lens/ExampleLenss';
-import { useAccount, useContractRead, useContractWrite } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useEnsName } from 'wagmi';
 import NFTs from '../components/NFTs';
 import axios from 'axios'
 import Carousel from 'react-native-snap-carousel'
@@ -31,12 +31,6 @@ import Web3 from 'web3';
 import { useNavigation } from '@react-navigation/native';
 import { zkSync_sepolia_contract_address } from '../constants';
 import { zkSync_Contract_ABI } from '../zkSync_Contract_ABI';
-
-
-const options = {
-  mic: true, // defaults to true
-  bitsPerSample: 16
-}
 
 export default function CameraScreen() {
   const [isAREnabled, setAREnabled] = useState(true)
@@ -66,7 +60,13 @@ export default function CameraScreen() {
   const navigator = useNavigation()
   const [lensMessege, setLensMessege] = useState('')
   const [displayObject, setDisplayObject] = useState(false)
+  const [mic, setMic] = useState(true)
   
+  const ens = useEnsName({
+    address,
+  })
+  
+  console.log(ens.data);
   const { data, isLoading, isSuccess, write } = useContractWrite({
     address: zkSync_sepolia_contract_address,
     abi: zkSync_Contract_ABI,
@@ -89,6 +89,11 @@ export default function CameraScreen() {
       }
     }
   }`
+  
+  const options = {
+    mic, // defaults to true
+    bitsPerSample: 16
+  }
 
   const handleLongPress = async () => {
     setDisplay('none')
@@ -280,8 +285,8 @@ export default function CameraScreen() {
             </View>
           </View>
         </Modal>
-        <TouchableOpacity className='absolute top-[116px] opacity-60 left-2 bg-white rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal2(true)}>
-          <Image source={{uri: 'https://as2.ftcdn.net/v2/jpg/04/36/71/89/1000_F_436718960_NVJ7n914NCszZdCR2w50WAgwCx5WcNOp.jpg'}} className='w-12 h-12 rounded-full' />
+        <TouchableOpacity className='absolute top-[116px] opacity-80 left-2 bg-[#87029694] p-1 rounded-md flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal2(true)}>
+          <Image source={{uri: 'https://as2.ftcdn.net/v2/jpg/04/36/71/89/1000_F_436718960_NVJ7n914NCszZdCR2w50WAgwCx5WcNOp.jpg'}} className='w-10 h-10 rounded-full' />
         </TouchableOpacity>
 
         {/* data feed */}
@@ -305,8 +310,8 @@ export default function CameraScreen() {
             </View>
           </View>
         </Modal>
-        <TouchableOpacity className='absolute top-[170px] opacity-80 left-2 bg-white p-1 rounded-full flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal3(true)}>
-          <Image source={require('../assets/chainlink_datafedd.png')} className='w-10 h-10 rounded-full' />
+        <TouchableOpacity className='absolute top-[170px] opacity-80 left-2 bg-[#87029694] p-1 rounded-md flex justify-start items-center flex-row z-2' style={{ display: display }} onPress={() => setModal3(true)}>
+          <Image source={require('../assets/chainlink_datafedd.png')} className='w-10 h-10 rounded-full bg-white' />
         </TouchableOpacity>
 
         {/* tokens */}
@@ -340,7 +345,7 @@ export default function CameraScreen() {
                                 }}
                               >
                                 <Image source={{ uri: item.logo }} width={50} height={50} />
-                                <Text className='text-slate-700 text-sm mt-2'>{(item.balance / 1E6).toFixed(2)} {item.name}</Text>
+                                <Text className='text-slate-400 text-sm mt-2'>{(item.balance / 1E6).toFixed(2)} {item.name}</Text>
                               </TouchableOpacity>
                             : <TouchableOpacity className='p-1 flex justify-center items-center rounded-md w-36 h-36 m-4' key={index}
                                 onPress={() => {
@@ -349,25 +354,25 @@ export default function CameraScreen() {
                                 }}
                               >
                                 <Image source={{ uri: item.logo }} width={50} height={50} />
-                                <Text className='text-slate-700 text-sm mt-2'>{(item.balance / 1E18).toFixed(4)} {item.name}</Text>
+                                <Text className='text-slate-400 text-sm mt-2'>{(item.balance / 1E18).toFixed(4)} {item.name}</Text>
                               </TouchableOpacity>
                           ))
                         : <View className='flex-1 w-full mt-24 flex justify-center items-center'><Text className='text-slate-700'>No Tokens Found! </Text></View>
                       }
                     </View>
-                  : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
+                  : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'rgb(148 163 184)'} size={'large'} /></View>
               }
             </View>
           </View>
         </Modal>
 
         {/* token button */}
-        <TouchableOpacity className='absolute top-16 px-4 opacity-60 left-2 bg-white p-0 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => setModal1(true)}>
-          <Image source={{uri: 'https://banner2.cleanpng.com/20180204/dve/kisspng-token-coin-initial-coin-offering-r-l-stevens-plasc-token-cliparts-5a76aca3596111.0557334415177268833661.jpg'}} className='w-12 h-12 rounded-full' />
+        <TouchableOpacity className='absolute top-16 px-4 opacity-80 left-2 bg-[#87029694] p-1 rounded-md flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={() => setModal1(true)}>
+          <Image source={{uri: 'https://banner2.cleanpng.com/20180204/dve/kisspng-token-coin-initial-coin-offering-r-l-stevens-plasc-token-cliparts-5a76aca3596111.0557334415177268833661.jpg'}} className='w-10 h-10 rounded-full' />
         </TouchableOpacity>
 
-      {/* lens button */}
-        <TouchableOpacity className='absolute top-2 px-4 left-2 opacity-80 bg-white p-1 rounded-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
+        {/* lens button */}
+        <TouchableOpacity className='absolute top-2 px-4 left-2 opacity-80 bg-[#87029694] p-1 rounded-md flex justify-start items-center flex-row z-20' style={{ display: display }} 
           onPress={() => {
             loadAR()
             setMain({type: 'lens', lensHandle})
@@ -375,20 +380,35 @@ export default function CameraScreen() {
           <Image source={require('../assets/lens.jpeg')} className='w-10 h-10 rounded-full' />
         </TouchableOpacity>
 
+        {/* ens button */}
+        <TouchableOpacity className='absolute top-[225px] px-4 left-2 opacity-80 bg-[#87029694] p-1 rounded-md flex justify-start items-center flex-row z-20' style={{ display: display }} 
+          onPress={() => {
+            loadAR()
+            setMain({type: 'ens', ensHandle: ens.data})
+          }}>
+          <Image source={{uri : 'https://cryptologos.cc/logos/ethereum-name-service-ens-logo.png'}} className='w-10 h-10 rounded-full bg-white' />
+        </TouchableOpacity>
+
         {/* download button */}
-        {videoUri != '' && <TouchableOpacity className='absolute bottom-36 right-0 bg-white p-2 rounded-tl-full rounded-bl-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={saveToMediaLibrary}>
-          <Feather name="download" size={24} color="black" style={{marginLeft: 2, marginRight: 2}} />
+        {videoUri != '' && <TouchableOpacity className='absolute bottom-60 right-0 bg-[#00000080] p-2 rounded-tl-full rounded-bl-full flex justify-start items-center flex-row z-20' style={{ display: display }} onPress={saveToMediaLibrary}>
+          <Feather name="download" size={20} color="white" style={{marginLeft: 2, marginRight: 2}} />
         </TouchableOpacity>}
 
         {/* share button */}
-        {sharableUri != '' && <TouchableOpacity className='absolute bottom-48 right-0 bg-white p-2 rounded-tl-full rounded-bl-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
+        {sharableUri != '' && <TouchableOpacity className='absolute bottom-48 right-0 bg-[#00000080] p-2 rounded-tl-full rounded-bl-full flex justify-start items-center flex-row z-20' style={{ display: display }} 
           onPress={() => setVisibleDialog(!visibleDialog)}>
-          <MaterialCommunityIcons name="share" size={24} color="black" style={{marginLeft: 2, marginRight: 2}} />
+          <MaterialCommunityIcons name="share" size={20} color="white" style={{marginLeft: 2, marginRight: 2}} />
         </TouchableOpacity>} 
      
         {/* rotate logo */}
         <TouchableOpacity className='absolute top-14 right-2 bg-[#00000080] p-2 rounded-full flex justify-start items-center flex-row z-20' onPress={loadAR} style={{ display: display }}>
           <Ionicons name="reload" size={24} color="white" style={{marginLeft: 2, marginRight: 2}} />
+        </TouchableOpacity>
+        
+        {/* mic */}
+        <TouchableOpacity className='absolute bottom-32 right-2 bg-[#00000080] p-2 rounded-full flex justify-start items-center flex-row z-20' onPress={() => setMic(!mic)} style={{ display: display }}>
+          {mic ? <Feather name="mic" size={24} color="white" style={{marginLeft: 2, marginRight: 2}} />
+          : <Feather name="mic-off" size={24} color="white" style={{marginLeft: 2, marginRight: 2}} />}
         </TouchableOpacity>
 
         {/* album */}
@@ -487,7 +507,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "70%",
     justifyContent: "flex-start",
-    backgroundColor: "rgb(226 232 240)",
+    backgroundColor: "rgb(15 23 42)",
     display:"flex",
     alignItems:'center',
     flexDirection:'row',

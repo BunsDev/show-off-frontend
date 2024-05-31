@@ -1,4 +1,4 @@
-rootProject.name = 'expo-starter-kit'
+rootProject.name = 'Show off'
 
 dependencyResolutionManagement {
   versionCatalogs {

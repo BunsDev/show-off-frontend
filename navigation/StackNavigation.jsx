@@ -17,6 +17,13 @@ export default function StackNavigation() {
         <>
             <Stack.Navigator
                 initialRouteName={initialScreen}
+                screenOptions={
+                    {
+                        // headerLeft: ({ canGoBack, onPress }) => canGoBack && (<TouchableOpacity className='bg-gray-100 p-2 rounded-lg' onPress={onPress}>
+                        //     <Entypo name="chevron-thin-left" size={18} color="black" />
+                        // </TouchableOpacity>)
+                    }
+                }
             >
                 <Stack.Screen
                     name="connect"
@@ -36,11 +43,7 @@ export default function StackNavigation() {
                     name="videolist"
                     component={VideoList}
                     options={{
-                        headerShown: true,
-                        headerTitleStyle: {
-                            fontSize: 18,
-                        },
-                        title: "Saved video links"
+                        headerShown: false,
                     }}
                 />
             </Stack.Navigator>

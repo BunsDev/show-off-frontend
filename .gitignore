@@ -2,11 +2,11 @@
 
 # dependencies
 node_modules/
-/alchemyApi.js
+/metro.config.js 
 /android
-/metro.config.js
+/alchemyApi.js
 
-# Expo
+# Expon
 .expo/
 dist/
 web-build/

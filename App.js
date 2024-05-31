@@ -8,7 +8,6 @@ import StackNavigation from './navigation/StackNavigation';
 import { PaperProvider } from 'react-native-paper';
 import 'expo-dev-client';
 import { StatusBar, Text, View } from 'react-native';
-import { ViroUtils, isARSupportedOnDevice } from '@viro-community/react-viro';
 
 // 1. Get projectId at https://cloud.walletconnect.com
 const projectId = 'e2bb5a774ec442b502bdd2d5b0404f5f'
@@ -18,7 +17,7 @@ const metadata = {
   name: 'Web3Modal RN',
   description: 'Web3Modal RN Example',
   url: 'https://web3modal.com',
-  icons: ['https://avatars.githubusercontent.com/u/37784886'],
+  icons: ['https://avatars.githubusercontent.com/u/37784886'], 
   redirect: {
     native: 'YOUR_APP_SCHEME://',
     universal: 'YOUR_APP_UNIVERSAL_LINK.com'
@@ -41,6 +40,7 @@ export default function App() {
 
   return (
     <>
+
         <PaperProvider>
           <WagmiConfig config={wagmiConfig}>
             <StatusBar

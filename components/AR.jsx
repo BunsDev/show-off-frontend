@@ -15,7 +15,8 @@ const AR = ({ main, setDisplayObject }) => {
   const [text, setText] = useState('Hello World!');
   const [xyz, setXyz] = useState({ x: 0, y: 0, z: -5 })
   const [xyz2, setXyz2] = useState({ x: 0, y: -1, z: -6 })
-  const [xyz3, setXyz3] = useState({ x: 0, y: -1, z: -6 })
+  const [xyz3, setXyz3] = useState({ x: 0, y: -1, z: -6 })  
+  const [xyz4, setXyz4] = useState({ x: 0, y: -1, z: -6 })  
 
   const onInitialized = (state, reason) => {
     if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
@@ -34,6 +35,10 @@ const AR = ({ main, setDisplayObject }) => {
 
   function _onDrag3(draggedToPosition, source) {
     setXyz3({ x: draggedToPosition[0], y: draggedToPosition[1], z: draggedToPosition[2] })
+  }
+
+  function _onDrag4(draggedToPosition, source) {
+    setXyz4({ x: draggedToPosition[0], y: draggedToPosition[1], z: draggedToPosition[2] })
   }
 
   return (
@@ -130,7 +135,7 @@ const AR = ({ main, setDisplayObject }) => {
               </ViroNode>
             }
             {
-              (main.type != 'lens' && main.type != 'data_feed' && main.type != 'nft' && main.type != '3DNft') &&
+              (main.type != 'lens' && main.type != 'data_feed' && main.type != 'token' && main.type != 'nft' && main.type != '3DNft' && main.type != 'ens') &&
               <ViroText text={text} position={[0, 0, -4]} dragType="FixedToWorld"
                   scale={[1, 1, 1]}/>
             }
@@ -152,6 +157,29 @@ const AR = ({ main, setDisplayObject }) => {
                   type="GLB" />
               </>
               
+            }
+            {(main.type == 'ens') && 
+              <ViroNode
+                position={[xyz4.x, xyz4.y, xyz4.z]}
+                  scale={[1, 1, 1]}
+                onDrag={_onDrag4}>
+                <ViroImage
+                  source={{uri : 'https://cryptologos.cc/logos/ethereum-name-service-ens-logo.png'}}
+                  position={[xyz4.x + 0.3, xyz4.y, xyz4.z]}
+                  width={1.5}
+                  height={1.5}
+                />
+                <ViroText text={`${main.ensHandle}`}
+                  width={2}
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 40,
+                    fontStyle: "italic",
+                    color: "#fff"
+                  }}
+                  position={[xyz4.x + 0.5, xyz4.y - 1.5, xyz4.z]}
+                />
+              </ViroNode>
             }
 
             {/* main.type == 'videoNft' it is remaining, add ViroVideo */}

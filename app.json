@@ -4,10 +4,10 @@
     "slug": "expo-starter-kit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/newlogo.png",
+    "icon": "./assets/favicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/newlogo.png",
+      "image": "./assets/favicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
@@ -25,7 +25,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/newlogo.png",
+        "foregroundImage": "./assets/favicon.png",
         "backgroundColor": "#000"
       },
       "permissions": [

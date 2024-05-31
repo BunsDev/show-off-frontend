@@ -111,7 +111,7 @@ export default function NFTs({ setMain, index, modal2, loadAR }) {
               }
             </View>
           </ScrollView>
-          : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'#000'} size={'large'} /></View>
+          : <View className='flex-1 flex justify-center items-center h-full w-screen'><ActivityIndicator animating={true} color={'rgb(148 163 184)'} size={'large'} /></View>
       }
     </>
   )
