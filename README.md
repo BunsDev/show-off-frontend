@@ -17,7 +17,7 @@
  - [zkSync sepolia - Storage contract](https://sepolia.explorer.zksync.io/address/0x5FC9b846a037b4A6DF8fBEFFc03A1Cc4bec57163#transactions)
  - [Polygon zkEVM cardona testnet - Storage contract](https://cardona-zkevm.polygonscan.com/address/0x61943eFBbDcB58F6F5a1171699AdAA4dBd9c748f)
  - [Show-off Backend](https://github.com/phovious-14/show-off-backend)
- - [Show off .APK file](https://drive.google.com/file/d/1-j2eeAI65vVQCZx1gkRBCLkdUXaVRbvH/view?usp=sharing)
+ - [Show off .APK file](https://drive.google.com/file/d/1K4mcTlAOySgeRZsj-FU83qWfOsFMP7cy/view?usp=sharing)
 
 
 ## How does it work? 🤔
