@@ -41,7 +41,4 @@
 ### Blockchain Integration for Security and Data Storage
 - Generated Video links will be stored on deployed contract
 - Smart contracts deployed on blockchain networks such as zkSync mainnet, Sepolia, and Polygon zkEVM Cardano testnet handle various functionalities within the app
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
